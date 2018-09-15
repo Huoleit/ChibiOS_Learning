@@ -115,7 +115,7 @@ int main(void)
    */
   halInit();
   chSysInit();
-
+/////////////////////////////////*******************
 
   while(palReadPad(GPIOA,GPIOA_BUTTON));
   while(!palReadPad(GPIOA,GPIOA_BUTTON));
