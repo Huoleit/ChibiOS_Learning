@@ -105,10 +105,7 @@ int main(void)
   chSysInit();
 
 
-  while(palReadPad(GPIOA,GPIOA_BUTTON));
-  chThdCreateStatic(button_thread_wa,sizeof(button_thread_wa),NORMALPRIO,button_function,NULL);
-  chThdCreateStatic(led_thread_wa,sizeof(led_thread_wa),NORMALPRIO,led_function,NULL);
-  //volatile int i =0;
+
   /*
    * Normal main() thread activity
    */
