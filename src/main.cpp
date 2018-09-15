@@ -30,11 +30,67 @@
 #include "shell.h"
 #include "chprintf.h"
 
+#include "morse.hpp"
+
 using namespace chibios_rt;
 
 /*
  * Application entry point.
+
+
  */
+volatile int code_state = 0;
+volatile bool flag_change = false;
+extern morse_code_t champion[FRAME_LENGTH];
+
+static THD_WORKING_AREA(button_thread_wa,128);
+static THD_FUNCTION(button_function,p){
+  button_state_t morse_button = B_UP;
+
+  while(true){
+    if(morse_button==B_UP&&!palReadPad(GPIOA,GPIOA_BUTTON)){
+      morse_button = B_DOWN;
+      //systime_t startT = chibios_rt::System::getTime() +TIME_MS2I(100);//gap time
+    }
+    if(morse_button==B_DOWN&&palReadPad(GPIOA,GPIOA_BUTTON)){
+        morse_button = B_UP;
+        code_state++;
+        flag_change = true;
+        code_state = code_state%FRAME_LENGTH;
+      }
+
+
+    chThdSleepMilliseconds(300);
+  }
+}
+
+//LED
+static THD_WORKING_AREA(led_thread_wa,128);
+static THD_FUNCTION(led_function,p){
+
+  while(palReadPad(GPIOA,GPIOA_BUTTON));
+  while(true){
+    //print_code(code_state);
+
+    for(int i=0;i<champion[code_state].length;i++){
+
+      palSetPad(GPIOA,GPIOA_LED);
+      chThdSleepMilliseconds(200);
+
+      palClearPad(GPIOA,GPIOA_LED);
+      if(champion[code_state].frame[i]==DASH)  chThdSleepMilliseconds(600);
+      else if(champion[code_state].frame[i]==DOT) chThdSleepMilliseconds(200);
+      if(flag_change) break;
+    }
+    if(flag_change)  flag_change = false;
+    else{
+      code_state++;
+      code_state = code_state%FRAME_LENGTH;
+    }
+    palSetPad(GPIOA,GPIOA_LED);
+    //chThdSleepMilliseconds(500);
+  }
+}
 int main(void)
 {
 
@@ -49,17 +105,20 @@ int main(void)
   chSysInit();
 
 
-  volatile int i =0;
+
+  chThdCreateStatic(button_thread_wa,sizeof(button_thread_wa),NORMALPRIO,button_function,NULL);
+  chThdCreateStatic(led_thread_wa,sizeof(led_thread_wa),NORMALPRIO,led_function,NULL);
+  //volatile int i =0;
   /*
    * Normal main() thread activity
    */
   while (true)
   {
-    i++;
+    //i++;
     systime_t startT = chibios_rt::System::getTime();
 
     //do something..
-    
+
     chibios_rt::BaseThread::sleepUntil(startT + TIME_MS2I(500));
     //chThdSleepMilliseconds(500); <- any difference using this?
   }
