@@ -64,11 +64,17 @@ static THD_FUNCTION(button_function,p){
       //systime_t startT = chibios_rt::System::getTime() +TIME_MS2I(100);//gap time
     }
     if(morse_button==B_DOWN&&palReadPad(GPIOA,GPIOA_BUTTON)){
-        morse_button = B_UP;
+        morse_button = B_HOLD;
         code_state++;
         flag_change = true;
         code_state = code_state%FRAME_LENGTH;
       }
+    if(morse_button==B_HOLD&&flag_change){
+      systime_t gap_time = chibios_rt::System::getTime()+TIME_MS2I(300);
+      morse_button = B_UP;
+    }
+    if(morse_button = B_UP&&flag_change&&chibios_rt::System::getTime() > gap_time)  flag_change = false;
+      
 
 
     chThdSleepMilliseconds(300);

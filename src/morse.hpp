@@ -1,11 +1,6 @@
 #ifndef _MORSE_H_
 #define _MORSE_H_
 
-
-
-
-
-
 #include "ch.hpp"
 
 #include "ch.h"
