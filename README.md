@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # For Windows, refer to the [Wiki](https://github.com/robomasterhkust/RMTutorialF103/wiki/1_0_Setup_ChibiStudio_Windows) pages
 
 # For Unix system(Tested on Ubuntu 16.04 & Mac OS Sierra 10.12.6)
@@ -34,3 +35,7 @@ run the following commands in the project directory
 ## Submitting assignments 
 This part will come up later on. 
 # ChibiOS_Learning
+=======
+# ChibiOS_Learning
+This is my first version code of morse-code assesment!
+>>>>>>> 05a42839bf49ede6bf6603afc32d40233505b2ec
