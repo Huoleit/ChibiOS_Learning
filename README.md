@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # For Windows, refer to the [Wiki](https://github.com/robomasterhkust/RMTutorialF103/wiki/1_0_Setup_ChibiStudio_Windows) pages
 
 # For Unix system(Tested on Ubuntu 16.04 & Mac OS Sierra 10.12.6)
@@ -5,21 +6,21 @@ By Yang Shaohui, Alex Au on 2018.09.13
 
 ## Getting started on Unix
 run the following commands in the project directory
-1.  For Linux, ubuntu to be exact: 
+1.  For Linux, ubuntu to be exact:
     `sudo apt-get install openocd gcc-arm-none-eabi`
 
     For Mac OSX, do the following: install homebrew first via https://brew.sh
-    
+
     then install the XCode command line toolchain `xcode-select --install`
-    
+
     `brew cask install xquartz java`
-    
+
     `brew install open-ocd`
-    
+
     `brew tap PX4/px4`
-    
-    `brew install px4-dev` 
-    
+
+    `brew install px4-dev`
+
 2. `git clone https://github.com/robomasterhkust/RMTutorialF103` and
 `cd RMTutorialF103` in your preferred directory
 
@@ -31,5 +32,9 @@ run the following commands in the project directory
 - for debugging, run `openocd -f openocd/start_st-link_debug.cfg` , followed by a gdb connection with you own IDE/editor, the VSCode configuration is provided and is used with the "Native Debug" extension
 - of course you can always use `telnet localhost 4444` and use terminal to interface with the openocd debug server directly
 
-## Submitting assignments 
-This part will come up later on. 
+## Submitting assignments
+This part will come up later on.
+=======
+# ChibiOS_Learning
+This is my first version code of morse-code assesment!
+>>>>>>> 5c89510cf4d0ac8b24c88c5678ab4910a3be3033
