@@ -1,14 +1,18 @@
 #include "morse.hpp"
 
-void print_code(int code_state_f){
-  for(int i=0;i<champion[code_state_f].length;i++){
+using namespace chibios_rt;
+
+
+void print_code(const morse_code_t& code){
+  for(int i=0;i<code.length;i++){
 
     palSetPad(GPIOA,GPIOA_LED);
     chThdSleepMilliseconds(200);
+    if(flag_change) break;
 
     palClearPad(GPIOA,GPIOA_LED);
-    if(champion[code_state_f].frame[i]==DASH)  chThdSleepMilliseconds(600);
-    else if(champion[code_state_f].frame[i]==DOT) chThdSleepMilliseconds(200);
+    if(code.frame[i]==DASH)  chThdSleepMilliseconds(600);
+    else if(code.frame[i]==DOT) chThdSleepMilliseconds(200);
     if(flag_change) break;
   }
   if(flag_change)  flag_change = false;

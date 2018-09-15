@@ -39,9 +39,20 @@ using namespace chibios_rt;
 
 
  */
+ morse_code_t champion[FRAME_LENGTH]={
+  {4,{DASH,DOT,DASH,DOT}},
+  {4,{DOT,DOT,DOT,DOT}},
+  {2,{DOT,DASH,NONE,NONE}},
+  {2,{DASH,DASH,NONE,NONE}},
+  {4,{DOT,DASH,DASH,DOT}},
+  {2,{DOT,DOT,NONE,NONE}},
+  {3,{DASH,DASH,DASH,NONE}},
+  {2,{DASH,DOT,NONE,NONE}}
+ };
+
 volatile int code_state = 0;
 volatile bool flag_change = false;
-extern morse_code_t champion[FRAME_LENGTH];
+//extern morse_code_t champion[];
 
 static THD_WORKING_AREA(button_thread_wa,128);
 static THD_FUNCTION(button_function,p){
@@ -70,8 +81,8 @@ static THD_FUNCTION(led_function,p){
 
 
   while(true){
-    //print_code(code_state);
-
+    print_code(champion[code_state]);
+/*
     for(int i=0;i<champion[code_state].length;i++){
 
       palSetPad(GPIOA,GPIOA_LED);
@@ -89,6 +100,7 @@ static THD_FUNCTION(led_function,p){
     }
     palSetPad(GPIOA,GPIOA_LED);
     //chThdSleepMilliseconds(500);
+    */
   }
 }
 int main(void)

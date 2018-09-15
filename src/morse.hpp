@@ -1,5 +1,20 @@
-#pragma once
+#ifndef _MORSE_H_
+#define _MORSE_H_
 
+
+
+
+
+
+#include "ch.hpp"
+
+#include "ch.h"
+#include "hal.h"
+
+#include "shell.h"
+#include "chprintf.h"
+
+#include "morse.hpp"
 
 #define FRAME_LENGTH  8
 typedef enum{
@@ -21,17 +36,12 @@ typedef struct{
 
 }morse_code_t;
 
-morse_code_t champion[FRAME_LENGTH]={
- {4,{DASH,DOT,DASH,DOT}},
- {4,{DOT,DOT,DOT,DOT}},
- {2,{DOT,DASH,NONE,NONE}},
- {2,{DASH,DASH,NONE,NONE}},
- {4,{DOT,DASH,DASH,DOT}},
- {2,{DOT,DOT,NONE,NONE}},
- {3,{DASH,DASH,DASH,NONE}},
- {2,{DASH,DOT,NONE,NONE}}
-};
 
 
+extern volatile bool flag_change;
+extern volatile int code_state;
 
-void print_code(int);
+
+void print_code(const morse_code_t& code);
+
+#endif /* end of include guard: _MORSE_H_ */
