@@ -51,33 +51,35 @@ using namespace chibios_rt;
  };
 
 volatile int code_state = 0;
-volatile bool flag_change = false;
+volatile bool flag_change = true;     //标志是否可以亮灯  true为可以亮灯 false 为不可以亮灯
 //extern morse_code_t champion[];
 
 static THD_WORKING_AREA(button_thread_wa,128);
 static THD_FUNCTION(button_function,p){
   button_state_t morse_button = B_UP;
   systime_t gap_time;
+
   while(true){
-    if(morse_button==B_UP&&(!palReadPad(GPIOA,GPIOA_BUTTON))){
-      morse_button = B_DOWN;
-      //systime_t startT = chibios_rt::System::getTime() +TIME_MS2I(100);//gap time
-    }
+    if(morse_button==B_UP&&(!palReadPad(GPIOA,GPIOA_BUTTON)))  morse_button = B_DOWN;
+
     if(morse_button==B_DOWN&&palReadPad(GPIOA,GPIOA_BUTTON)){
-        morse_button = B_HOLD;
+        morse_button = B_HOLD;   //进入开关检测时间
+        flag_change = false;
         code_state++;
-        flag_change = true;
-        code_state = code_state%FRAME_LENGTH;
+        code_state = code_state%FRAME_LENGTH;   //执行状态标记
+
+        gap_time = chibios_rt::System::getTime()+TIME_MS2I(300);  //松开butto后多久可以进行亮灯
       }
-    if(morse_button==B_HOLD&&flag_change){
-      gap_time = chibios_rt::System::getTime()+TIME_MS2I(300);
-      morse_button = B_UP;
+    if(morse_button==B_HOLD){
+      if(chibios_rt::System::getTime() > gap_time){
+        flag_change = true;
+
+        morse_button=B_UP;
+      }
+      if(!palReadPad(GPIOA,GPIOA_BUTTON))  morse_button=B_DOWN;
     }
-    if(morse_button == B_UP&&flag_change&&(chibios_rt::System::getTime() > gap_time))  flag_change = false;
 
-
-
-    chThdSleepMilliseconds(300);
+    chThdSleepMilliseconds(70);   //极其小的挂起保证开关检测的准确性
   }
 }
 
@@ -88,25 +90,6 @@ static THD_FUNCTION(led_function,p){
 
   while(true){
     print_code(champion[code_state]);
-/*
-    for(int i=0;i<champion[code_state].length;i++){
-
-      palSetPad(GPIOA,GPIOA_LED);
-      chThdSleepMilliseconds(200);
-
-      palClearPad(GPIOA,GPIOA_LED);
-      if(champion[code_state].frame[i]==DASH)  chThdSleepMilliseconds(600);
-      else if(champion[code_state].frame[i]==DOT) chThdSleepMilliseconds(200);
-      if(flag_change) break;
-    }
-    if(flag_change)  flag_change = false;
-    else{
-      code_state++;
-      code_state = code_state%FRAME_LENGTH;
-    }
-    palSetPad(GPIOA,GPIOA_LED);
-    //chThdSleepMilliseconds(500);
-    */
   }
 }
 int main(void)
