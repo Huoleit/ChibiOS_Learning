@@ -57,9 +57,9 @@ volatile bool flag_change = false;
 static THD_WORKING_AREA(button_thread_wa,128);
 static THD_FUNCTION(button_function,p){
   button_state_t morse_button = B_UP;
-
+  systime_t gap_time;
   while(true){
-    if(morse_button==B_UP&&!palReadPad(GPIOA,GPIOA_BUTTON)){
+    if(morse_button==B_UP&&(!palReadPad(GPIOA,GPIOA_BUTTON))){
       morse_button = B_DOWN;
       //systime_t startT = chibios_rt::System::getTime() +TIME_MS2I(100);//gap time
     }
@@ -70,11 +70,11 @@ static THD_FUNCTION(button_function,p){
         code_state = code_state%FRAME_LENGTH;
       }
     if(morse_button==B_HOLD&&flag_change){
-      systime_t gap_time = chibios_rt::System::getTime()+TIME_MS2I(300);
+      gap_time = chibios_rt::System::getTime()+TIME_MS2I(300);
       morse_button = B_UP;
     }
-    if(morse_button = B_UP&&flag_change&&chibios_rt::System::getTime() > gap_time)  flag_change = false;
-      
+    if(morse_button == B_UP&&flag_change&&(chibios_rt::System::getTime() > gap_time))  flag_change = false;
+
 
 
     chThdSleepMilliseconds(300);
